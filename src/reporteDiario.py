@@ -27,6 +27,7 @@ SOFTWARE.
 Los productos que salen del reporte diario son:
 3
 4
+5
 7
 8
 9
@@ -79,7 +80,6 @@ def prod4(fte, producto):
 
 
 def prod3_13_14_26_27(fte):
-
     onlyfiles = [f for f in listdir(fte) if isfile(join(fte, f))]
     cumulativoCasosNuevos = pd.DataFrame({'Region': [],
                                           'Casos nuevos': []})
@@ -88,9 +88,9 @@ def prod3_13_14_26_27(fte):
     cumulativoFallecidos = pd.DataFrame({'Region': [],
                                          'Fallecidos': []})
     casosNuevosConSintomas = pd.DataFrame({'Region': [],
-                                         'Fecha': []})
+                                           'Fecha': []})
     casosNuevosSinSintomas = pd.DataFrame({'Region': [],
-                                         'Fecha': []})
+                                           'Fecha': []})
 
     onlyfiles.sort()
     onlyfiles.remove('README.md')
@@ -99,7 +99,7 @@ def prod3_13_14_26_27(fte):
         date = eachfile.replace("-CasosConfirmados-totalRegional", "").replace(".csv", "")
         dataframe = pd.read_csv(fte + eachfile)
         # sanitize headers
-        #print(eachfile)
+        # print(eachfile)
         dataframe.rename(columns={'Región': 'Region'}, inplace=True)
         dataframe.rename(columns={'Casos  nuevos': 'Casos nuevos'}, inplace=True)
         dataframe.rename(columns={' Casos nuevos': 'Casos nuevos'}, inplace=True)
@@ -112,7 +112,6 @@ def prod3_13_14_26_27(fte):
         dataframe.rename(columns={'Casos  totales  acumulados': 'Casos totales'}, inplace=True)
         dataframe.rename(columns={'Casos totales acumulados ': 'Casos totales'}, inplace=True)
         dataframe.rename(columns={'Casos totales acumulados': 'Casos totales'}, inplace=True)
-
 
         dataframe.rename(columns={' Casos fallecidos': 'Fallecidos'}, inplace=True)
         dataframe.rename(columns={'Fallecidos totales ': 'Fallecidos'}, inplace=True)
@@ -167,11 +166,10 @@ def prod3_13_14_26_27(fte):
             date2 = (pd.to_datetime(date)).strftime('%Y-%m-%d')
             if date2 < '2020-04-29':
                 if casosNuevosConSintomas['Region'].empty:
-                    casosNuevosConSintomas[['Region', 'Fecha']] = dataframe[['Region','Casos nuevos']]
+                    casosNuevosConSintomas[['Region', 'Fecha']] = dataframe[['Region', 'Casos nuevos']]
                     casosNuevosConSintomas.rename(columns={'Fecha': date}, inplace=True)
                 else:
                     casosNuevosConSintomas[date] = dataframe['Casos nuevos']
-
 
         if 'Casos nuevos sin sintomas' in dataframe.columns:
             if casosNuevosSinSintomas['Region'].empty:
@@ -179,8 +177,6 @@ def prod3_13_14_26_27(fte):
                 casosNuevosSinSintomas.rename(columns={'Fecha': date}, inplace=True)
             else:
                 casosNuevosSinSintomas[date] = dataframe['Casos nuevos sin sintomas']
-
-
 
     # estandarizar nombres de regiones
     regionName(cumulativoCasosNuevos)
