@@ -112,13 +112,16 @@ def prod5(fte, producto):
     casos_confirmados_totales = pd.read_csv('../input/ReporteDiario/CasosConfirmadosTotales.csv')
     today_row = (casos_confirmados_totales[casos_confirmados_totales['Fecha'] == timestamp_dia_primero])
     a['Casos activos por FIS'] = today_row['Casos activos'].values
+    #Recuperados FIS se calculan restando fallecidos y activos FIS
     a['Casos recuperados por FIS'] = (today_row['Casos totales acumulados'].values - today_row['Casos activos'].values - today_row['Fallecidos'].values)
     #Falta casos activos y recuperados por FD: ocupar numeros antiguos para calcular
     d = timedelta(days=14)
     fourteendays = now - d
     timestamp_dia_primero_fourteen = fourteendays.strftime("%d-%m-%Y")
     fourteendaysago_row = (casos_confirmados_totales[casos_confirmados_totales['Fecha'] == timestamp_dia_primero_fourteen])
+    #Activos por FD se calculan con los casos totales de hoy, menos los casos totales de hace 14 días
     a['Casos activos por FD'] = today_row['Casos totales acumulados'].values - fourteendaysago_row['Casos totales acumulados'].values
+    #Recuperados FD se calculan restando fallecidos y activos FD
     a['Casos recuperados por FD'] = (today_row['Casos totales acumulados'].values - a['Casos activos por FD'] - today_row['Fallecidos'].values)
 
 
