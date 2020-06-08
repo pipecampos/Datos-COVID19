@@ -85,9 +85,12 @@ def prod5(fte, producto):
     # necesito series a nivel nacional por fecha:
     # Casos nuevos con sintomas
     # Casos totales
-    # Casos recuperados  #ya no se reporta
+
     # Fallecidos
-    # Casos activos
+    # Casos activos por fecha de inicio de sintomas
+    # Casos recuperados por fecha de inicio de sintomas
+    # Casos activos por fecha de diagnostico
+    # Casos recuperados por fecha de diagnostico
     # Casos nuevos sin sintomas
 
     now = datetime.now()
@@ -105,10 +108,19 @@ def prod5(fte, producto):
                       'Casos nuevos con sintomas': 'Casos nuevos con sintomas',
                       'Casos nuevos sin sintomas*': 'Casos nuevos sin sintomas',
                       'Fallecidos totales': 'Fallecidos'}, inplace=True)
-    #Faltan casos activos: prod 5 esta ahora en el reporte diario, hay que migrar para alla
+    #Faltan casos activos y recuperados por FIS: prod 5 esta ahora en el reporte diario, hay que migrar para alla
     casos_confirmados_totales = pd.read_csv('../input/ReporteDiario/CasosConfirmadosTotales.csv')
     today_row = (casos_confirmados_totales[casos_confirmados_totales['Fecha'] == timestamp_dia_primero])
-    a['Casos activos'] = today_row['Casos activos'].values
+    a['Casos activos por FIS'] = today_row['Casos activos'].values
+    a['Casos recuperados por FIS'] = (today_row['Casos totales acumulados'].values - today_row['Casos activos'].values - today_row['Fallecidos'].values)
+    #Falta casos activos y recuperados por FD: ocupar numeros antiguos para calcular
+    d = timedelta(days=14)
+    fourteendays = now - d
+    timestamp_dia_primero_fourteen = fourteendays.strftime("%d-%m-%Y")
+    fourteendaysago_row = (casos_confirmados_totales[casos_confirmados_totales['Fecha'] == timestamp_dia_primero_fourteen])
+    a['Casos activos por FD'] = today_row['Casos totales acumulados'].values - fourteendaysago_row['Casos totales acumulados'].values
+    a['Casos recuperados por FD'] = (today_row['Casos totales acumulados'].values - a['Casos activos por FD'] - today_row['Fallecidos'].values)
+
 
 
     ## esto es estandar
