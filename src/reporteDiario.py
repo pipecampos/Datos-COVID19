@@ -88,8 +88,6 @@ def prod5(fte, producto):
     # Fallecidos
     # Casos activos
     # Casos nuevos sin sintomas
-    # Casos nuevos sin notificar
-    # Casos activos confirmados
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
@@ -97,14 +95,14 @@ def prod5(fte, producto):
     df_input_file['Fecha'] = pd.to_datetime(df_input_file['Fecha'], format='%d-%m-%Y')
     #print(df_input_file.to_string())
     #las columnas son :
-    # Casos totales acumulados  Casos nuevos totales  Casos nuevos con sintomas  Casos nuevos sin sintomas*  Casos nuevos sin notificar Fallecidos totales  Casos activos confirmados
+    # Casos totales acumulados  Casos nuevos totales  Casos nuevos con sintomas  Casos nuevos sin sintomas*  Casos nuevos sin notificar Fallecidos totales  Casos activos confirmados  Casos nuevos sin notificar  Casos probables  Casos activos probables
 
     df_input_file.rename(columns={'Casos totales acumulados': 'Casos totales',
                       'Casos nuevos totales': 'Casos nuevos totales',
                       'Casos nuevos con sintomas': 'Casos nuevos con sintomas',
                       'Casos nuevos sin sintomas*': 'Casos nuevos sin sintomas',
-                      'Fallecidos totales': 'Fallecidos',
-                      'Casos activos confirmados': 'Casos activos confirmados'}, inplace=True)
+                      'Fallecidos totales': 'Fallecidos'}, inplace=True)
+
 
     #print(timestamp)
     last_row = df_input_file[df_input_file['Fecha'] == timestamp]
@@ -271,6 +269,7 @@ def prod3_13_14_26_27(fte, fte2):
     regionName(casosProbablesAcumulados)
     regionName(casosActivosProbables)
 
+#------------- producto3 (before 2020-06-21)
 
     onlyfiles = [f for f in listdir(fte) if isfile(join(fte, f))]
     cumulativoCasosNuevos = pd.DataFrame({'Region': [],
