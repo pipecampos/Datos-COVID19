@@ -88,6 +88,10 @@ def prod5(fte, producto):
     # Fallecidos
     # Casos activos
     # Casos nuevos sin sintomas
+    #------
+    # Casos nuevos sin notificar (a partir del 19 de Junio 2020)
+    # Casos probables acumulados (a partir del 21 de Junio 2020)
+    # Casos activos probables (a partir del 21 de Junio 2020)
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
@@ -95,7 +99,9 @@ def prod5(fte, producto):
     df_input_file['Fecha'] = pd.to_datetime(df_input_file['Fecha'], format='%d-%m-%Y')
     #print(df_input_file.to_string())
     #las columnas son :
-    # Casos totales acumulados  Casos nuevos totales  Casos nuevos con sintomas  Casos nuevos sin sintomas*  Casos nuevos sin notificar Fallecidos totales  Casos activos confirmados  Casos nuevos sin notificar  Casos probables  Casos activos probables
+    # Casos totales acumulados  Casos nuevos totales  Casos nuevos con sintomas  Casos nuevos sin sintomas*  
+    # Casos nuevos sin notificar Fallecidos totales  Casos activos confirmados  Casos nuevos sin notificar  
+    # Casos probables acumulados  Casos activos probables
 
     df_input_file.rename(columns={'Casos totales acumulados': 'Casos totales',
                       'Casos nuevos totales': 'Casos nuevos totales',
