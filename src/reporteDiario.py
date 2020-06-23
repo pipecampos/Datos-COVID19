@@ -194,10 +194,10 @@ def prod5(fte, producto):
         # lo que pasa antes de la fecha de corte
         else:
             # Casos activos por FD = casos activos hasta el 2 de Junio. Antes de eso se copian casos activos
-            df_output_file.loc[i, 'Casos activos por FD'] = df_output_file.loc[i, 'Casos activos']
+            df_output_file.loc[i, 'Casos activos por FD'] = df_output_file.loc[i, 'Casos activos por FD']
             df_output_file.loc[i, 'Casos activos por FIS'] = np.NaN
             df_output_file.loc[i, 'Casos recuperados por FIS'] = np.NaN
-            df_output_file.loc[i, 'Casos recuperados por FD'] = df_output_file.loc[i, 'Casos recuperados']
+            df_output_file.loc[i, 'Casos recuperados por FD'] = df_output_file.loc[i, 'Casos recuperados por FD']
 
     ################################## Lo de Demian
 
@@ -212,7 +212,9 @@ def prod5(fte, producto):
     #print(totales.columns.dtype)
     totales.columns = totales.columns.astype(str)
 
-    #print(totales.to_string())
+    #totales.drop(['Casos activos', 'Casos recuperados'], inplace=True)
+    print(totales.index)
+    print(totales.head(15).to_string())
 
     totales.to_csv(producto, index_label='Fecha')
     totales_t = totales.transpose()
@@ -324,7 +326,7 @@ def prod3_13_14_26_27(fte):
             date2 = (pd.to_datetime(date)).strftime('%Y-%m-%d')
             if date2 < '2020-04-29':
                 if casosNuevosConSintomas['Region'].empty:
-                    casosNuevosConSintomas[['Region', 'Fecha']] = dataframe[['Region','Casos nuevos']]
+                    casosNuevosConSintomas[['Region', 'Fecha']] = dataframe[['Region', 'Casos nuevos']]
                     casosNuevosConSintomas.rename(columns={'Fecha': date}, inplace=True)
                 else:
                     casosNuevosConSintomas[date] = dataframe['Casos nuevos']
