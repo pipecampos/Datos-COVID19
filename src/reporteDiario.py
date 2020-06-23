@@ -103,7 +103,7 @@ def prod5(fte, producto):
                       'Casos nuevos totales': 'Casos nuevos totales',
                       'Casos nuevos con sintomas': 'Casos nuevos con sintomas',
                       'Casos nuevos sin sintomas*': 'Casos nuevos sin sintomas',
-                      'Fallecidos totales': 'Fallecidos'}, inplace=True)
+                      'Fallecidos totales': 'Fallecidos', 'Casos activos': 'Casos activos por FIS'}, inplace=True)
 
     #print(timestamp)
     last_row = df_input_file[df_input_file['Fecha'] == timestamp]
@@ -147,11 +147,11 @@ def prod5(fte, producto):
         if i >= fecha_de_corte:
             #print(str(i))
             # Casos activos por FIS parten el 2 de Junio por definicion y corresponden a los casos activos del reporte diario
-            df_output_file.loc[i, 'Casos activos por FIS'] = df_output_file.loc[i, 'Casos activos']
+            #df_output_file.loc[i, 'Casos activos por FIS'] = df_output_file.loc[i, 'Casos activos']
             # Recuperados FIS se calculan restando fallecidos y activos FIS
             df_output_file.loc[i, 'Casos recuperados por FIS'] = \
                 df_output_file.loc[i, 'Casos totales'] - \
-                df_output_file.loc[i, 'Casos activos'] - \
+                df_output_file.loc[i, 'Casos activos por FIS'] - \
                 df_output_file.loc[i, 'Fallecidos']
             # Falta casos activos y recuperados por FD: ocupar numeros antiguos para calcular
             fourteen_days = timedelta(days=14)
@@ -175,7 +175,7 @@ def prod5(fte, producto):
                         df_output_file.loc[i - timedelta(days=1), 'Fallecidos']
                     print('Casos activos por FD hoy: ' + str(df_output_file.loc[i, 'Casos activos por FD']))
                     print('Casos activos ayer: ' + str(df_output_file.loc[i - timedelta(days=1), 'Casos activos por FD']))
-                    print('Casoso nuevos totales hoy : ' + str(df_output_file.loc[i, 'Casos nuevos totales']))
+                    print('Casos nuevos totales hoy : ' + str(df_output_file.loc[i, 'Casos nuevos totales']))
                     print('Casos totales 14 dias atras: ' + str(df_output_file.loc[i - fourteen_days, 'Casos nuevos totales']))
                     print('Fallecidos hoy: ' + str(df_output_file.loc[i, 'Fallecidos']))
                     print('Fallecidos ayer: ' + str(df_output_file.loc[i - timedelta(days=1), 'Fallecidos']))
@@ -192,12 +192,12 @@ def prod5(fte, producto):
                     df_output_file.loc[i, 'Fallecidos'])
 
         # lo que pasa antes de la fecha de corte
-        else:
+        # else:
             # Casos activos por FD = casos activos hasta el 2 de Junio. Antes de eso se copian casos activos
-            df_output_file.loc[i, 'Casos activos por FD'] = df_output_file.loc[i, 'Casos activos por FD']
-            df_output_file.loc[i, 'Casos activos por FIS'] = np.NaN
-            df_output_file.loc[i, 'Casos recuperados por FIS'] = np.NaN
-            df_output_file.loc[i, 'Casos recuperados por FD'] = df_output_file.loc[i, 'Casos recuperados por FD']
+            # df_output_file.loc[i, 'Casos activos por FD'] = df_output_file.loc[i, 'Casos activos']
+            # df_output_file.loc[i, 'Casos activos por FIS'] = np.NaN
+            # df_output_file.loc[i, 'Casos recuperados por FIS'] = np.NaN
+            # df_output_file.loc[i, 'Casos recuperados por FD'] = df_output_file.loc[i, 'Casos recuperados']
 
     ################################## Lo de Demian
 
@@ -212,7 +212,10 @@ def prod5(fte, producto):
     #print(totales.columns.dtype)
     totales.columns = totales.columns.astype(str)
 
-    #totales.drop(['Casos activos', 'Casos recuperados'], inplace=True)
+    for i in ['Casos activos', 'Casos recuperados']:
+        if i in totales.index:
+            totales.drop([i], inplace=True)
+
     print(totales.index)
     print(totales.head(15).to_string())
 
